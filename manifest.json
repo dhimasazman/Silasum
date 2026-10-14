@@ -1,0 +1,22 @@
+{
+  "name": "Silasum",
+  "short_name": "Silasum",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d2b45",
+  "theme_color": "#0d2b45",
+  "icons": [
+    {
+      "src": "logo1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

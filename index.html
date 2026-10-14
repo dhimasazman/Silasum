@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silasum - Sistem Laporan Harian Lapas Sumedang</title>
+  
+  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d2b45">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <div class="app-container">
+    <!-- Header Aplikasi Kedinasan -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="logo-group">
+          <img src="logo1.png" alt="Logo Imipas" class="header-logo" onerror="this.style.display='none'">
+          <img src="logo2.png" alt="Logo Pemasyarakatan" class="header-logo" onerror="this.style.display='none'">
+        </div>
+        <div class="header-titles">
+          <h1>SILASUM</h1>
+          <p>Sistem Laporan Harian Lapas Kelas IIB Sumedang</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stat Ringkasan Cepat -->
+    <div class="summary-cards">
+      <div class="card-stat">
+        <span class="stat-label">Kapasitas</span>
+        <span class="stat-value" id="card-kapasitas">0</span>
+      </div>
+      <div class="card-stat">
+        <span class="stat-label">Penghuni</span>
+        <span class="stat-value" id="card-penghuni">0</span>
+      </div>
+      <div class="card-stat">
+        <span class="stat-label">Hunian</span>
+        <span class="stat-value" id="card-persen">0%</span>
+      </div>
+      <div class="card-stat">
+        <span class="stat-label">Status</span>
+        <span class="stat-status" id="card-status-badge">Normal</span>
+      </div>
+    </div>
+
+    <!-- Container Form Utama -->
+    <div class="main-card">
+      
+      <!-- Navigasi Tab -->
+      <nav class="tab-nav">
+        <button type="button" class="tab-btn active" data-tab="tab-umum">1. Info Umum</button>
+        <button type="button" class="tab-btn" data-tab="tab-register">2. Register A & B</button>
+        <button type="button" class="tab-btn" data-tab="tab-demografi">3. Demografi</button>
+        <button type="button" class="tab-btn" data-tab="tab-keterangan">4. Detail Pidana</button>
+        <button type="button" class="tab-btn" data-tab="tab-pembinaan">5. Tahap Pembinaan</button>
+      </nav>
+
+      <form id="wbpForm">
+        
+        <!-- Tab 1: Info Umum -->
+        <div id="tab-umum" class="tab-content active">
+          <div class="form-grid-2">
+            <div class="form-group full-width">
+              <label for="tanggal">Tanggal Laporan</label>
+              <input type="date" id="tanggal" required>
+            </div>
+            <div class="form-group">
+              <label for="kapasitas">Kapasitas Lapas (Orang)</label>
+              <input type="number" id="kapasitas" value="0" min="0">
+            </div>
+            <div class="form-group">
+              <label for="jumlahPenghuni">Jumlah Penghuni (Orang)</label>
+              <input type="number" id="jumlahPenghuni" value="0" min="0">
+            </div>
+            <div class="form-group">
+              <label for="diDalamLapas">Di Dalam Lapas</label>
+              <input type="number" id="diDalamLapas" value="0" min="0">
+            </div>
+            <div class="form-group">
+              <label for="diLuarLapas">Di Luar Lapas</label>
+              <input type="number" id="diLuarLapas" value="0" min="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Register A & B -->
+        <div id="tab-register" class="tab-content">
+          <div class="form-grid-2">
+            <div class="sub-section">
+              <h4>Register A (Tahanan)</h4>
+              <div class="form-group"><label for="regAI">AI</label><input type="number" class="regA" id="regAI" value="0" min="0"></div>
+              <div class="form-group"><label for="regAII">AII</label><input type="number" class="regA" id="regAII" value="0" min="0"></div>
+              <div class="form-group"><label for="regAIII">AIII</label><input type="number" class="regA" id="regAIII" value="0" min="0"></div>
+              <div class="form-group"><label for="regAIV">AIV</label><input type="number" class="regA" id="regAIV" value="0" min="0"></div>
+              <div class="form-group"><label for="regAV">AV</label><input type="number" class="regA" id="regAV" value="0" min="0"></div>
+            </div>
+            <div class="sub-section">
+              <h4>Register B (Narapidana)</h4>
+              <div class="form-group"><label for="regBI">BI</label><input type="number" class="regB" id="regBI" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIIa">BIIa</label><input type="number" class="regB" id="regBIIa" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIIb">BIIb</label><input type="number" class="regB" id="regBIIb" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIII">BIII</label><input type="number" class="regB" id="regBIII" value="0" min="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Demografi -->
+        <div id="tab-demografi" class="tab-content">
+          <div class="form-grid-2">
+            <div class="sub-section">
+              <h4>Jenis Kelamin & Status</h4>
+              <div class="form-group"><label for="jkLaki">Laki-Laki Total</label><input type="number" id="jkLaki" value="0" min="0"></div>
+              <div class="form-group"><label for="jkPerempuan">Perempuan Total</label><input type="number" id="jkPerempuan" value="0" min="0"></div>
+              <div class="form-group"><label for="napiLaki">Napi Laki-laki</label><input type="number" id="napiLaki" value="0" min="0"></div>
+              <div class="form-group"><label for="napiPerempuan">Napi Perempuan</label><input type="number" id="napiPerempuan" value="0" min="0"></div>
+              <div class="form-group"><label for="tahananLaki">Tahanan Laki-laki</label><input type="number" id="tahananLaki" value="0" min="0"></div>
+              <div class="form-group"><label for="tahananPerempuan">Tahanan Perempuan</label><input type="number" id="tahananPerempuan" value="0" min="0"></div>
+            </div>
+            <div class="sub-section">
+              <h4>Kewarganegaraan & Residivis</h4>
+              <div class="form-group"><label for="kewarganegaraanWni">WNI</label><input type="number" id="kewarganegaraanWni" value="0" min="0"></div>
+              <div class="form-group"><label for="kewarganegaraanWna">WNA</label><input type="number" id="kewarganegaraanWna" value="0" min="0"></div>
+              <div class="form-group"><label for="residivis">Jumlah Residivis</label><input type="number" id="residivis" value="0" min="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Detail Pidana -->
+        <div id="tab-keterangan" class="tab-content">
+          <div class="form-grid-2">
+            <div class="sub-section">
+              <h4>Keterangan Di Dalam Lapas</h4>
+              <div class="form-group"><label for="ketTeroris">Teroris</label><input type="number" id="ketTeroris" value="0" min="0"></div>
+              <div class="form-group"><label for="ketNarkoba">Narkoba</label><input type="number" id="ketNarkoba" value="0" min="0"></div>
+              <div class="form-group"><label for="ketPsikotropika">Psikotropika</label><input type="number" id="ketPsikotropika" value="0" min="0"></div>
+              <div class="form-group"><label for="ketKesehatan">Kesehatan</label><input type="number" id="ketKesehatan" value="0" min="0"></div>
+              <div class="form-group"><label for="ketKorupsi">Korupsi</label><input type="number" id="ketKorupsi" value="0" min="0"></div>
+              <div class="form-group"><label for="ketPidum">Pidum</label><input type="number" id="ketPidum" value="0" min="0"></div>
+              <div class="form-group"><label for="ketIlegalLogging">Ilegal Logging</label><input type="number" id="ketIlegalLogging" value="0" min="0"></div>
+              <div class="form-group"><label for="ketHumanTrafficking">Human Trafficking</label><input type="number" id="ketHumanTrafficking" value="0" min="0"></div>
+              <div class="form-group"><label for="ketPidanaMati">Pidana Mati</label><input type="number" id="ketPidanaMati" value="0" min="0"></div>
+              <div class="form-group"><label for="ketPidanaSH">Pidana Seumur Hidup</label><input type="number" id="ketPidanaSH" value="0" min="0"></div>
+            </div>
+            <div class="sub-section">
+              <h4>Keterangan Di Luar Lapas</h4>
+              <div class="form-group"><label for="bonSakit">Bon Sakit</label><input type="number" id="bonSakit" value="0" min="0"></div>
+              <div class="form-group"><label for="bonKejaksaan">Bon Kejaksaan</label><input type="number" id="bonKejaksaan" value="0" min="0"></div>
+              <div class="form-group"><label for="bonLain">Bon Lain-lain</label><input type="number" id="bonLain" value="0" min="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Tahap Pembinaan -->
+        <div id="tab-pembinaan" class="tab-content">
+          <div class="sub-section">
+            <h4>Kategori Tahap Pembinaan WBP</h4>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="m13">⅓ Masa Pidana</label>
+                <input type="number" id="m13" value="0" min="0">
+              </div>
+              <div class="form-group">
+                <label for="m12">½ Masa Pidana</label>
+                <input type="number" id="m12" value="0" min="0">
+              </div>
+              <div class="form-group">
+                <label for="m23">⅔ Masa Pidana</label>
+                <input type="number" id="m23" value="0" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- Tombol Aksi Navigasi Dinamis -->
+        <!-- Tombol Aksi Navigasi Dinamis -->
+<div class="form-actions-right">
+  <button type="button" id="btnPrev" class="btn btn-custom btn-secondary" style="display: none;">
+    ← Kembali
+  </button>
+  <button type="button" id="btnNext" class="btn btn-custom btn-primary">
+    Lanjutkan ➔
+  </button>
+  <button type="button" id="btnShareWa" class="btn btn-custom btn-wa" style="display: none;">
+    <span class="btn-icon">📲</span>
+    <span class="btn-text">Share ke WhatsApp</span>
+  </button>
+  <button type="button" id="btnSave" class="btn btn-custom btn-success" style="display: none;">
+    <span class="btn-icon">💾</span>
+    <span class="btn-text">Simpan ke Spreadsheet</span>
+  </button>
+  <button type="button" id="btnDownload" class="btn btn-custom btn-primary" style="display: none;">
+    <span class="btn-icon">🖼️</span>
+    <span class="btn-text">Unduh Gambar</span>
+  </button>
+</div>
+
+    <!-- Footer Web Form -->
+    <footer class="app-footer">
+      <p>Dibuat dengan ❤️</p>
+      <p>© 2026 Humas Lapas Sumedang. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- TEMPLATE INFOGRAFIS UNTUK DIUNDUH SEBAGAI GAMBAR -->
+  <div id="capture-area-wrapper">
+    <div id="capture-area" class="infographic-container">
+      
+      <div class="info-header">
+        <div class="logo-group-info">
+          <img src="logo1.png" alt="Logo Imipas" class="info-logo" onerror="this.style.display='none'">
+          <img src="logo2.png" alt="Logo Pemasyarakatan" class="info-logo" onerror="this.style.display='none'">
+        </div>
+        <div class="header-text">
+          <h2>LAPORAN HARIAN SILASUM</h2>
+          <p>Lapas Kelas IIB Sumedang — Kementerian Imigrasi dan Pemasyarakatan</p>
+        </div>
+      </div>
+
+      <div class="info-date-bar">
+        📅 Tanggal: <span id="out-tanggal">-</span>
+      </div>
+
+      <!-- Top Stats Grid -->
+      <div class="top-stats-grid">
+        <div class="stat-box">
+          <div class="stat-head">KAPASITAS</div>
+          <div class="stat-val" id="out-kapasitas">0 Orang</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-head">JUMLAH PENGHUNI</div>
+          <div class="stat-val" id="out-jumlahPenghuni">0 Orang</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-head">DI DALAM LAPAS</div>
+          <div class="stat-val" id="out-diDalamLapas">0 Orang</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-head">DI LUAR LAPAS</div>
+          <div class="stat-val" id="out-diLuarLapas">0 Orang</div>
+        </div>
+      </div>
+
+      <!-- Main Grid Body -->
+      <div class="info-body-grid">
+        <!-- Kolom Kiri -->
+        <div class="info-col">
+          <div class="card-box">
+            <div class="card-header">RINCIAN TAHANAN & NARAPIDANA</div>
+            <div class="card-body row-flex">
+              <div class="sub-table">
+                <div class="sub-header">REGISTER A (TAHANAN)</div>
+                <div class="sub-row"><span>AI</span><span>:</span><span id="out-regAI">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>AII</span><span>:</span><span id="out-regAII">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>AIII</span><span>:</span><span id="out-regAIII">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>AIV</span><span>:</span><span id="out-regAIV">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>AV</span><span>:</span><span id="out-regAV">0</span><span>Orang</span></div>
+                <div class="sub-footer"><span>JUMLAH</span><span>:</span><span id="out-totalRegA">0</span><span>Orang</span></div>
+              </div>
+              <div class="sub-table">
+                <div class="sub-header">REGISTER B (NAPI)</div>
+                <div class="sub-row"><span>BI</span><span>:</span><span id="out-regBI">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIIa</span><span>:</span><span id="out-regBIIa">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIIb</span><span>:</span><span id="out-regBIIb">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIII</span><span>:</span><span id="out-regBIII">0</span><span>Orang</span></div>
+                <div class="sub-footer"><span>JUMLAH</span><span>:</span><span id="out-totalRegB">0</span><span>Orang</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-header">KETERANGAN DI DALAM LAPAS</div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>Teroris</span><span>:</span><span id="out-ketTeroris">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Narkoba</span><span>:</span><span id="out-ketNarkoba">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Psikotropika</span><span>:</span><span id="out-ketPsikotropika">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Kesehatan</span><span>:</span><span id="out-ketKesehatan">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Korupsi</span><span>:</span><span id="out-ketKorupsi">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Pidum</span><span>:</span><span id="out-ketPidum">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Ilegal Logging</span><span>:</span><span id="out-ketIlegalLogging">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Human Trafficking</span><span>:</span><span id="out-ketHumanTrafficking">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Pidana Mati</span><span>:</span><span id="out-ketPidanaMati">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Pidana SH</span><span>:</span><span id="out-ketPidanaSH">0</span><span>Orang</span></div>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-header">KEWARGANEGARAAN</div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>WNI</span><span>:</span><span id="out-kewarganegaraanWni">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>WNA</span><span>:</span><span id="out-kewarganegaraanWna">0</span><span>Orang</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan -->
+        <div class="info-col">
+          <div class="card-box">
+            <div class="card-header">JENIS KELAMIN & STATUS</div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>Laki - laki Total</span><span>:</span><span id="out-jkLaki">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Perempuan Total</span><span>:</span><span id="out-jkPerempuan">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Napi laki-laki</span><span>:</span><span id="out-napiLaki">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Napi Perempuan</span><span>:</span><span id="out-napiPerempuan">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Tahanan laki-laki</span><span>:</span><span id="out-tahananLaki">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Tahanan Perempuan</span><span>:</span><span id="out-tahananPerempuan">0</span><span>Orang</span></div>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-header">KETERANGAN DI LUAR LAPAS</div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>Bon Sakit</span><span>:</span><span id="out-bonSakit">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Bon Kejaksaan</span><span>:</span><span id="out-bonKejaksaan">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>Bon Lain-lain</span><span>:</span><span id="out-bonLain">0</span><span>Orang</span></div>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-header">TAHAP PEMBINAAN</div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>⅓ Masa Pidana</span><span>:</span><span id="out-m13">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>½ Masa Pidana</span><span>:</span><span id="out-m12">0</span><span>Orang</span></div>
+              <div class="sub-row"><span>⅔ Masa Pidana</span><span>:</span><span id="out-m23">0</span><span>Orang</span></div>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-header">DATA RESIDIVIS</div>
+            <div class="card-body list-rows">
+              <div class="sub-row font-bold"><span>Jumlah Residivis</span><span>:</span><span id="out-residivis">0</span><span>Orang</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-footer">
+        <p><strong>Lapas Kelas IIB Sumedang</strong></p>
+        <p>Tertib — Agamis — Humanis — Unggul</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
