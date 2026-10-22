@@ -2,7 +2,7 @@
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxHjU1itJjBNQJQPlNUEAaM85Lcf8pFcMlvJd6MZowix2zNNPgC3njbrxyIakTl-7BT/exec";
 
-// Daftar urutan tab
+// Daftar urutan tab (6 Tab)
 const TAB_ORDER = [
   "tab-umum",
   "tab-register",
@@ -16,33 +16,27 @@ let currentTabIndex = 0;
 document.addEventListener("DOMContentLoaded", () => {
   // Set tanggal hari ini secara otomatis
   const today = new Date();
-  document.getElementById("tanggal").valueAsDate = today;
+  const dateInput = document.getElementById("tanggal");
+  if (dateInput) dateInput.valueAsDate = today;
 
-  // Inisialisasi Tab & Navigasi Tombol
+  // Inisialisasi Tab
   initTabs();
 
-  // Listener input untuk update otomatis ke infografis & indikator ringkasan
-  document
-    .getElementById("wbpForm")
-    .addEventListener("input", updateInfographicValues);
-
-  // Listener Tombol
-  document.getElementById("btnNext").addEventListener("click", handleNextTab);
-  document.getElementById("btnPrev").addEventListener("click", handlePrevTab);
-  document
-    .getElementById("btnSave")
-    .addEventListener("click", handleSaveToSpreadsheet);
-  document
-    .getElementById("btnDownload")
-    .addEventListener("click", handleDownloadImage);
-
-  // Listener Tombol Share WA (jika elemen tersedia di HTML)
-  const btnShareWa = document.getElementById("btnShareWa");
-  if (btnShareWa) {
-    btnShareWa.addEventListener("click", handleShareWhatsApp);
+  // Listener input & change untuk update otomatis ke infografis
+  const form = document.getElementById("wbpForm");
+  if (form) {
+    form.addEventListener("input", updateInfographicValues);
+    form.addEventListener("change", updateInfographicValues);
   }
 
-  // Inisialisasi perhitungan & tampilan tombol awal
+  // Listener Tombol Navigasi & Aksi
+  document.getElementById("btnNext")?.addEventListener("click", handleNextTab);
+  document.getElementById("btnPrev")?.addEventListener("click", handlePrevTab);
+  document.getElementById("btnSave")?.addEventListener("click", handleSaveToSpreadsheet);
+  document.getElementById("btnDownload")?.addEventListener("click", handleDownloadImage);
+  document.getElementById("btnShareWa")?.addEventListener("click", handleShareWhatsApp);
+
+  // Inisialisasi awal
   updateInfographicValues();
   updateActionButtons();
 
@@ -80,7 +74,7 @@ function switchTab(index) {
   document
     .querySelectorAll(".tab-content")
     .forEach((c) => c.classList.remove("active"));
-  document.getElementById(targetId).classList.add("active");
+  document.getElementById(targetId)?.classList.add("active");
 
   updateActionButtons();
 }
@@ -107,17 +101,14 @@ function updateActionButtons() {
   const btnDownload = document.getElementById("btnDownload");
   const btnShareWa = document.getElementById("btnShareWa");
 
-  // Tombol Kembali muncul dari Tahap 2 (index 1) ke atas
   if (btnPrev) btnPrev.style.display = currentTabIndex > 0 ? "flex" : "none";
 
-  // Tahap 1-4 (index 0 - 3): Tampilkan Lanjutkan, Sembunyikan Simpan, Download, & Share WA
   if (currentTabIndex < TAB_ORDER.length - 1) {
     if (btnNext) btnNext.style.display = "flex";
     if (btnSave) btnSave.style.display = "none";
     if (btnDownload) btnDownload.style.display = "none";
     if (btnShareWa) btnShareWa.style.display = "none";
   } else {
-    // Tahap 5 (index 4 - Tahap Pembinaan): Tampilkan Simpan, Download, & Share WA
     if (btnNext) btnNext.style.display = "none";
     if (btnSave) btnSave.style.display = "flex";
     if (btnDownload) btnDownload.style.display = "flex";
@@ -136,6 +127,15 @@ function formatDateIndonesian(dateString) {
   };
   const date = new Date(dateString);
   return date.toLocaleDateString("id-ID", options);
+}
+
+// Format Mata Uang Rupiah
+function formatRupiah(angka) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(angka || 0);
 }
 
 // Toast Notifikasi Sederhana
@@ -206,9 +206,10 @@ function updateInfographicValues() {
     { in: "residivis", out: "out-residivis" },
   ];
 
-  const rawDate = document.getElementById("tanggal").value;
-  document.getElementById("out-tanggal").innerText =
-    formatDateIndonesian(rawDate);
+  const rawDate = document.getElementById("tanggal")?.value;
+  if (document.getElementById("out-tanggal")) {
+    document.getElementById("out-tanggal").innerText = formatDateIndonesian(rawDate);
+  }
 
   mappings.forEach((item) => {
     const inputEl = document.getElementById(item.in);
@@ -218,17 +219,17 @@ function updateInfographicValues() {
     }
   });
 
-  document.getElementById("out-totalRegA").innerText = totalRegA;
-  document.getElementById("out-totalRegB").innerText = totalRegB;
+  if (document.getElementById("out-totalRegA")) document.getElementById("out-totalRegA").innerText = totalRegA;
+  if (document.getElementById("out-totalRegB")) document.getElementById("out-totalRegB").innerText = totalRegB;
 
   // Update Ringkasan Stat Atas
-  const kap = Number(document.getElementById("kapasitas").value || 0);
-  const penghuni = Number(document.getElementById("jumlahPenghuni").value || 0);
+  const kap = Number(document.getElementById("kapasitas")?.value || 0);
+  const penghuni = Number(document.getElementById("jumlahPenghuni")?.value || 0);
   const persen = kap > 0 ? Math.round((penghuni / kap) * 100) : 0;
 
-  document.getElementById("card-kapasitas").innerText = kap;
-  document.getElementById("card-penghuni").innerText = penghuni;
-  document.getElementById("card-persen").innerText = persen + "%";
+  if (document.getElementById("card-kapasitas")) document.getElementById("card-kapasitas").innerText = kap;
+  if (document.getElementById("card-penghuni")) document.getElementById("card-penghuni").innerText = penghuni;
+  if (document.getElementById("card-persen")) document.getElementById("card-persen").innerText = persen + "%";
 
   const badge = document.getElementById("card-status-badge");
   if (badge) {
@@ -243,23 +244,56 @@ function updateInfographicValues() {
       badge.style.color = "#16a34a";
     }
   }
+
+  // --- KODE PERHITUNGAN REALISASI ANGGARAN ---
+  const tahun = document.getElementById("tahunAnggaran")
+    ? document.getElementById("tahunAnggaran").value
+    : "2026";
+  const pagu = Number(
+    document.getElementById("paguAnggaran")
+      ? document.getElementById("paguAnggaran").value
+      : 0
+  );
+  const realisasi = Number(
+    document.getElementById("realisasiAnggaran")
+      ? document.getElementById("realisasiAnggaran").value
+      : 0
+  );
+
+  const persentase = pagu > 0 ? ((realisasi / pagu) * 100).toFixed(2) : "0,00";
+
+  if (document.getElementById("out-tahunAnggaran")) {
+    document.getElementById("out-tahunAnggaran").innerText = tahun;
+  }
+  if (document.getElementById("out-paguAnggaran")) {
+    document.getElementById("out-paguAnggaran").innerText = formatRupiah(pagu);
+  }
+  if (document.getElementById("out-realisasiAnggaran")) {
+    document.getElementById("out-realisasiAnggaran").innerText = formatRupiah(realisasi);
+  }
+  if (document.getElementById("out-persentaseAnggaran")) {
+    document.getElementById("out-persentaseAnggaran").innerText =
+      persentase.replace(".", ",") + "%";
+  }
 }
 
 // Simpan ke Spreadsheet
 async function handleSaveToSpreadsheet() {
   const btn = document.getElementById("btnSave");
+  if (!btn) return;
+
   const icon = btn.querySelector(".btn-icon");
   const text = btn.querySelector(".btn-text");
 
   btn.disabled = true;
-  icon.innerHTML = '<span class="spinner"></span>';
-  text.innerText = "Menyimpan...";
+  if (icon) icon.innerHTML = '<span class="spinner"></span>';
+  if (text) text.innerText = "Menyimpan...";
 
   try {
-    const inputs = document.querySelectorAll("input");
+    const inputs = document.querySelectorAll("input, select");
     const formData = {};
     inputs.forEach((input) => {
-      formData[input.id] = input.value || 0;
+      if (input.id) formData[input.id] = input.value || 0;
     });
 
     await fetch(APPS_SCRIPT_URL, {
@@ -270,8 +304,8 @@ async function handleSaveToSpreadsheet() {
     });
 
     btn.classList.add("btn-state-success");
-    icon.innerText = "✓";
-    text.innerText = "Berhasil Disimpan!";
+    if (icon) icon.innerText = "✓";
+    if (text) text.innerText = "Berhasil Disimpan!";
     showToast("✅ Data berhasil dikirim ke Google Spreadsheet!", "success");
   } catch (err) {
     showToast("❌ Gagal menyimpan data: " + err.message, "error");
@@ -279,8 +313,8 @@ async function handleSaveToSpreadsheet() {
     setTimeout(() => {
       btn.disabled = false;
       btn.classList.remove("btn-state-success");
-      icon.innerText = "💾";
-      text.innerText = "Simpan ke Spreadsheet";
+      if (icon) icon.innerText = "💾";
+      if (text) text.innerText = "Simpan ke Spreadsheet";
     }, 2500);
   }
 }
@@ -288,18 +322,19 @@ async function handleSaveToSpreadsheet() {
 // Unduh Gambar Infografis
 async function handleDownloadImage() {
   const btn = document.getElementById("btnDownload");
+  if (!btn) return;
+
   const icon = btn.querySelector(".btn-icon");
   const text = btn.querySelector(".btn-text");
 
   btn.disabled = true;
-  icon.innerHTML = '<span class="spinner"></span>';
-  text.innerText = "Memproses Gambar...";
+  if (icon) icon.innerHTML = '<span class="spinner"></span>';
+  if (text) text.innerText = "Memproses Gambar...";
 
   try {
     updateInfographicValues();
 
     const captureArea = document.getElementById("capture-area");
-
     const images = captureArea.getElementsByTagName("img");
     for (let img of images) {
       if (!img.complete) {
@@ -318,14 +353,14 @@ async function handleDownloadImage() {
     });
 
     const link = document.createElement("a");
-    const dateVal = document.getElementById("tanggal").value || "Laporan";
+    const dateVal = document.getElementById("tanggal")?.value || "Laporan";
     link.download = `Laporan_Harian_WBP_${dateVal}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
 
     btn.classList.add("btn-state-success");
-    icon.innerText = "✓";
-    text.innerText = "Gambar Diunduh!";
+    if (icon) icon.innerText = "✓";
+    if (text) text.innerText = "Gambar Diunduh!";
     showToast("🖼️ Gambar infografis berhasil diunduh!", "success");
   } catch (err) {
     showToast("❌ Gagal mengunduh gambar: " + err.message, "error");
@@ -333,8 +368,8 @@ async function handleDownloadImage() {
     setTimeout(() => {
       btn.disabled = false;
       btn.classList.remove("btn-state-success");
-      icon.innerText = "🖼️";
-      text.innerText = "Unduh Gambar";
+      if (icon) icon.innerText = "🖼️";
+      if (text) text.innerText = "Unduh Gambar";
     }, 2500);
   }
 }
@@ -342,25 +377,29 @@ async function handleDownloadImage() {
 // Share Gambar & Teks ke WhatsApp
 async function handleShareWhatsApp() {
   const btn = document.getElementById("btnShareWa");
+  if (!btn) return;
+
   const icon = btn.querySelector(".btn-icon");
   const text = btn.querySelector(".btn-text");
 
   btn.disabled = true;
-  icon.innerHTML = '<span class="spinner"></span>';
-  text.innerText = "Memproses...";
+  if (icon) icon.innerHTML = '<span class="spinner"></span>';
+  if (text) text.innerText = "Memproses...";
 
   try {
     updateInfographicValues();
 
     // 1. Susun Teks Ringkasan Pesan
-    const tgl = formatDateIndonesian(document.getElementById("tanggal").value);
-    const kap = document.getElementById("kapasitas").value || 0;
-    const penghuni = document.getElementById("jumlahPenghuni").value || 0;
-    const didalam = document.getElementById("diDalamLapas").value || 0;
-    const diluar = document.getElementById("diLuarLapas").value || 0;
-    const m13 = document.getElementById("m13").value || 0;
-    const m12 = document.getElementById("m12").value || 0;
-    const m23 = document.getElementById("m23").value || 0;
+    const tgl = formatDateIndonesian(document.getElementById("tanggal")?.value);
+    const kap = document.getElementById("kapasitas")?.value || 0;
+    const penghuni = document.getElementById("jumlahPenghuni")?.value || 0;
+    const didalam = document.getElementById("diDalamLapas")?.value || 0;
+    const diluar = document.getElementById("diLuarLapas")?.value || 0;
+
+    const thn = document.getElementById("tahunAnggaran")?.value || "2026";
+    const pagu = formatRupiah(document.getElementById("paguAnggaran")?.value || 0);
+    const realisasi = formatRupiah(document.getElementById("realisasiAnggaran")?.value || 0);
+    const persentase = document.getElementById("out-persentaseAnggaran")?.innerText || "0%";
 
     const captionText = `*LAPORAN HARIAN SILASUM*
 🏛️ *Lapas Kelas IIB Sumedang*
@@ -372,10 +411,9 @@ async function handleShareWhatsApp() {
 - Di Dalam Lapas: ${didalam} Orang
 - Di Luar Lapas: ${diluar} Orang
 
-🕒 *TAHAP PEMBINAAN*
-- ⅓ Masa Pidana: ${m13} Orang
-- ½ Masa Pidana: ${m12} Orang
-- ⅔ Masa Pidana: ${m23} Orang`;
+💰 *REALISASI ANGGARAN ${thn}*
+- Pagu: ${pagu}
+- Realisasi: ${realisasi} (${persentase})`;
 
     // 2. Render Gambar dari Infografis
     const captureArea = document.getElementById("capture-area");
@@ -396,64 +434,16 @@ async function handleShareWhatsApp() {
       useCORS: true,
     });
 
-    // Format angka ke format mata uang Rupiah
-    function formatRupiah(angka) {
-      return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      }).format(angka || 0);
-    }
-
-    // Di dalam fungsi updateInfographicValues():
-    function updateInfographicValues() {
-      // ... kode perhitungan existing ...
-
-      // Update Realisasi Anggaran Dinamis
-      const tahun = document.getElementById("tahunAnggaran")
-        ? document.getElementById("tahunAnggaran").value
-        : "2026";
-      const pagu = Number(
-        document.getElementById("paguAnggaran")
-          ? document.getElementById("paguAnggaran").value
-          : 0,
-      );
-      const realisasi = Number(
-        document.getElementById("realisasiAnggaran")
-          ? document.getElementById("realisasiAnggaran").value
-          : 0,
-      );
-
-      const persentase =
-        pagu > 0 ? ((realisasi / pagu) * 100).toFixed(2) : "0,00";
-
-      if (document.getElementById("out-tahunAnggaran")) {
-        document.getElementById("out-tahunAnggaran").innerText = tahun;
-      }
-      if (document.getElementById("out-paguAnggaran")) {
-        document.getElementById("out-paguAnggaran").innerText =
-          formatRupiah(pagu);
-      }
-      if (document.getElementById("out-realisasiAnggaran")) {
-        document.getElementById("out-realisasiAnggaran").innerText =
-          formatRupiah(realisasi);
-      }
-      if (document.getElementById("out-persentaseAnggaran")) {
-        document.getElementById("out-persentaseAnggaran").innerText =
-          persentase.replace(".", ",") + "%";
-      }
-    }
-
     // 3. Konversi Canvas ke File Blob
     const blob = await new Promise((resolve) =>
-      canvas.toBlob(resolve, "image/png"),
+      canvas.toBlob(resolve, "image/png")
     );
-    const dateVal = document.getElementById("tanggal").value || "WBP";
+    const dateVal = document.getElementById("tanggal")?.value || "WBP";
     const file = new File([blob], `Laporan_Harian_${dateVal}.png`, {
       type: "image/png",
     });
 
-    // 4. Jika Perangkat Mendukung Native File Share (HP/Tablet)
+    // 4. Berbagi via Web Share API
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
@@ -462,19 +452,17 @@ async function handleShareWhatsApp() {
       });
       showToast("📲 Berhasil membuka menu berbagi!", "success");
     } else {
-      // Fallback untuk Browser Desktop/Laptop
       await navigator.clipboard.writeText(captionText);
       const encodedText = encodeURIComponent(captionText);
       window.open(
         `https://api.whatsapp.com/send?text=${encodedText}`,
-        "_blank",
+        "_blank"
       );
       showToast(
         "📋 Teks disalin! Gambar diunduh otomatis untuk Anda lampirkan di WA.",
-        "info",
+        "info"
       );
 
-      // Otomatis unduh gambar untuk diunggah manual di WA Web
       const link = document.createElement("a");
       link.download = file.name;
       link.href = canvas.toDataURL("image/png");
@@ -487,8 +475,8 @@ async function handleShareWhatsApp() {
   } finally {
     setTimeout(() => {
       btn.disabled = false;
-      icon.innerText = "📲";
-      text.innerText = "Share ke WA";
+      if (icon) icon.innerText = "📲";
+      if (text) text.innerText = "Share ke WA";
     }, 1500);
   }
 }
