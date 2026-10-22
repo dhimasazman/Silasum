@@ -151,6 +151,7 @@ function updateInfographicValues() {
     { in: "regBIIa", out: "out-regBIIa" },
     { in: "regBIIb", out: "out-regBIIb" },
     { in: "regBIII", out: "out-regBIII" },
+    { in: "regSH", out: "out-regSH" },
     { in: "jkLaki", out: "out-jkLaki" },
     { in: "jkPerempuan", out: "out-jkPerempuan" },
     { in: "napiLaki", out: "out-napiLaki" },
