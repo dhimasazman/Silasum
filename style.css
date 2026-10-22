@@ -239,7 +239,8 @@ body {
   margin-bottom: 4px;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #cbd5e1;
@@ -249,7 +250,8 @@ body {
   background-color: #ffffff;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: #0d2b45;
   box-shadow: 0 0 0 2px rgba(13, 43, 69, 0.1);
@@ -510,7 +512,7 @@ body {
 
 .sub-row {
   display: grid;
-  grid-template-columns: 1fr 12px 40px 42px;
+  grid-template-columns: 100px 12px 1fr auto;
   align-items: center;
   font-size: 0.8rem;
 }
@@ -521,6 +523,7 @@ body {
 .sub-row > span:nth-child(4) { text-align: left; color: #475569; }
 
 .sub-table .sub-row {
+  grid-template-columns: 1fr 12px 40px 42px;
   padding: 3px 4px;
 }
 
@@ -537,6 +540,10 @@ body {
 
 .sub-footer > span {
   color: #ffffff !important;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 .info-footer {
