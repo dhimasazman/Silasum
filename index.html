@@ -11,6 +11,8 @@
 
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Library Chart.js untuk Diagram Batang -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -29,6 +31,10 @@
           <h1>SILASUM</h1>
           <p>Sistem Laporan Harian Lapas Kelas IIB Sumedang</p>
         </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btnReset" class="icon-btn" title="Kosongkan form" aria-label="Kosongkan form">🗑️</button>
+        <button type="button" id="btnTheme" class="icon-btn" title="Mode gelap / terang" aria-label="Ganti tema">🌙</button>
       </div>
     </header>
 
@@ -52,9 +58,25 @@
       </div>
     </div>
 
+    <!-- Bar Tingkat Hunian -->
+    <div class="occupancy-card">
+      <div class="occupancy-top">
+        <span class="occupancy-title">Tingkat Hunian</span>
+        <span class="occupancy-note" id="hunianLabel">Isi kapasitas &amp; jumlah penghuni</span>
+      </div>
+      <div class="occupancy-track"><div class="occupancy-fill" id="hunianFill"></div></div>
+    </div>
+
     <!-- Container Form Utama -->
     <div class="main-card">
       
+      <!-- Progress Langkah -->
+      <div class="progress-head">
+        <span id="progressLabel">Langkah 1 dari 6</span>
+        <span id="progressName">Info Umum</span>
+      </div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+
       <!-- Navigasi Tab -->
       <nav class="tab-nav">
         <button type="button" class="tab-btn active" data-tab="tab-umum">1. Info Umum</button>
@@ -206,9 +228,20 @@
               </div>
             </div>
           </div>
+          <div class="budget-card">
+            <div class="budget-top">
+              <span>Serapan Anggaran</span>
+              <strong id="budgetPercent">0%</strong>
+            </div>
+            <div class="occupancy-track"><div class="occupancy-fill" id="budgetFill"></div></div>
+            <div class="budget-note" id="budgetNote">Isi pagu &amp; realisasi untuk melihat serapan</div>
+          </div>
         </div>
 
       </form>
+
+      <!-- Pemeriksaan Konsistensi Data -->
+      <div id="smartHints" class="smart-hints"></div>
 
       <!-- Tombol Aksi Navigasi Dinamis -->
       <div class="form-actions-right">
@@ -308,19 +341,11 @@
             </div>
           </div>
 
+          <!-- Bagian Diagram Batang Keterangan Di Dalam Lapas -->
           <div class="card-box">
             <div class="card-header">KETERANGAN DI DALAM LAPAS</div>
-            <div class="card-body list-rows">
-              <div class="sub-row"><span>Teroris</span><span>:</span><span id="out-ketTeroris">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Narkoba</span><span>:</span><span id="out-ketNarkoba">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Psikotropika</span><span>:</span><span id="out-ketPsikotropika">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Kesehatan</span><span>:</span><span id="out-ketKesehatan">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Korupsi</span><span>:</span><span id="out-ketKorupsi">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Pidum</span><span>:</span><span id="out-ketPidum">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Ilegal Logging</span><span>:</span><span id="out-ketIlegalLogging">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Human Trafficking</span><span>:</span><span id="out-ketHumanTrafficking">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Pidana Mati</span><span>:</span><span id="out-ketPidanaMati">0</span><span>Orang</span></div>
-              <div class="sub-row"><span>Pidana SH</span><span>:</span><span id="out-ketPidanaSH">0</span><span>Orang</span></div>
+            <div class="card-body" style="padding: 12px; background: #ffffff;">
+              <canvas id="chartKetDalamLapas" style="width: 100%; height: 260px;"></canvas>
             </div>
           </div>
 
@@ -387,7 +412,7 @@
 
       <div class="info-footer">
         <p><strong>Lapas Kelas IIB Sumedang</strong></p>
-        <p>Tertib — Agamis — Humanis — Unggul</p>
+        <p>Tertib - Agamis - Humanis - Unggul</p>
       </div>
 
     </div>

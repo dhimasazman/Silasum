@@ -1,4 +1,4 @@
-const CACHE_NAME = "hanjuang-wbp-v1";
+const CACHE_NAME = "hanjuang-wbp-v2";
 
 // Daftar berkas yang disimpan ke cache agar PWA bisa di-install & digunakan offline
 const urlsToCache = [
