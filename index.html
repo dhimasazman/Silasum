@@ -62,6 +62,7 @@
         <button type="button" class="tab-btn" data-tab="tab-demografi">3. Demografi</button>
         <button type="button" class="tab-btn" data-tab="tab-keterangan">4. Detail Pidana</button>
         <button type="button" class="tab-btn" data-tab="tab-pembinaan">5. Tahap Pembinaan</button>
+        <button type="button" class="tab-btn" data-tab="tab-anggaran">6. Anggaran</button>
       </nav>
 
       <form id="wbpForm">
@@ -104,13 +105,13 @@
               <div class="form-group"><label for="regAV">AV</label><input type="number" class="regA" id="regAV" value="0" min="0"></div>
             </div>
             <div class="sub-section">
-  <h4>Register B (Narapidana)</h4>
-  <div class="form-group"><label for="regBI">BI</label><input type="number" class="regB" id="regBI" value="0" min="0"></div>
-  <div class="form-group"><label for="regBIIa">BIIa</label><input type="number" class="regB" id="regBIIa" value="0" min="0"></div>
-  <div class="form-group"><label for="regBIIb">BIIb</label><input type="number" class="regB" id="regBIIb" value="0" min="0"></div>
-  <div class="form-group"><label for="regBIII">BIII</label><input type="number" class="regB" id="regBIII" value="0" min="0"></div>
-  <div class="form-group"><label for="regBSH">SH (Seumur Hidup)</label><input type="number" class="regB" id="regBSH" value="0" min="0"></div>
-</div>
+              <h4>Register B (Narapidana)</h4>
+              <div class="form-group"><label for="regBI">BI</label><input type="number" class="regB" id="regBI" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIIa">BIIa</label><input type="number" class="regB" id="regBIIa" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIIb">BIIb</label><input type="number" class="regB" id="regBIIb" value="0" min="0"></div>
+              <div class="form-group"><label for="regBIII">BIII</label><input type="number" class="regB" id="regBIII" value="0" min="0"></div>
+              <div class="form-group"><label for="regSH">SH (Seumur Hidup)</label><input type="number" class="regB" id="regSH" value="0" min="0"></div>
+            </div>
           </div>
         </div>
 
@@ -180,28 +181,58 @@
             </div>
           </div>
         </div>
-<!-- Tombol Aksi Navigasi Dinamis -->
-        <!-- Tombol Aksi Navigasi Dinamis -->
-<div class="form-actions-right">
-  <button type="button" id="btnPrev" class="btn btn-custom btn-secondary" style="display: none;">
-    ← Kembali
-  </button>
-  <button type="button" id="btnNext" class="btn btn-custom btn-primary">
-    Lanjutkan ➔
-  </button>
-  <button type="button" id="btnShareWa" class="btn btn-custom btn-wa" style="display: none;">
-    <span class="btn-icon">📲</span>
-    <span class="btn-text">Share ke WhatsApp</span>
-  </button>
-  <button type="button" id="btnSave" class="btn btn-custom btn-success" style="display: none;">
-    <span class="btn-icon">💾</span>
-    <span class="btn-text">Simpan ke Spreadsheet</span>
-  </button>
-  <button type="button" id="btnDownload" class="btn btn-custom btn-primary" style="display: none;">
-    <span class="btn-icon">🖼️</span>
-    <span class="btn-text">Unduh Gambar</span>
-  </button>
-</div>
+
+        <!-- Tab 6: Realisasi Anggaran -->
+        <div id="tab-anggaran" class="tab-content">
+          <div class="sub-section">
+            <h4>Data Realisasi Anggaran</h4>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="tahunAnggaran">Tahun Anggaran</label>
+                <select id="tahunAnggaran" class="form-control">
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026" selected>2026</option>
+                  <option value="2027">2027</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paguAnggaran">Pagu Anggaran (Rp)</label>
+                <input type="number" id="paguAnggaran" value="0" min="0">
+              </div>
+              <div class="form-group">
+                <label for="realisasiAnggaran">Realisasi Anggaran (Rp)</label>
+                <input type="number" id="realisasiAnggaran" value="0" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Tombol Aksi Navigasi Dinamis -->
+      <div class="form-actions-right">
+        <button type="button" id="btnPrev" class="btn btn-custom btn-secondary" style="display: none;">
+          ← Kembali
+        </button>
+        <button type="button" id="btnNext" class="btn btn-custom btn-primary">
+          Lanjutkan ➔
+        </button>
+        <button type="button" id="btnShareWa" class="btn btn-custom btn-wa" style="display: none;">
+          <span class="btn-icon">📲</span>
+          <span class="btn-text">Share ke WhatsApp</span>
+        </button>
+        <button type="button" id="btnSave" class="btn btn-custom btn-success" style="display: none;">
+          <span class="btn-icon">💾</span>
+          <span class="btn-text">Simpan ke Spreadsheet</span>
+        </button>
+        <button type="button" id="btnDownload" class="btn btn-custom btn-primary" style="display: none;">
+          <span class="btn-icon">🖼️</span>
+          <span class="btn-text">Unduh Gambar</span>
+        </button>
+      </div>
+
+    </div>
 
     <!-- Footer Web Form -->
     <footer class="app-footer">
@@ -266,14 +297,14 @@
                 <div class="sub-footer"><span>JUMLAH</span><span>:</span><span id="out-totalRegA">0</span><span>Orang</span></div>
               </div>
               <div class="sub-table">
-  <div class="sub-header">REGISTER B (NAPI)</div>
-  <div class="sub-row"><span>BI</span><span>:</span><span id="out-regBI">0</span><span>Orang</span></div>
-  <div class="sub-row"><span>BIIa</span><span>:</span><span id="out-regBIIa">0</span><span>Orang</span></div>
-  <div class="sub-row"><span>BIIb</span><span>:</span><span id="out-regBIIb">0</span><span>Orang</span></div>
-  <div class="sub-row"><span>BIII</span><span>:</span><span id="out-regBIII">0</span><span>Orang</span></div>
-  <div class="sub-row"><span>SH (Seumur Hidup)</span><span>:</span><span id="out-regSH">0</span><span>Orang</span></div>
-  <div class="sub-footer"><span>JUMLAH</span><span>:</span><span id="out-totalRegB">0</span><span>Orang</span></div>
-</div>
+                <div class="sub-header">REGISTER B (NAPI)</div>
+                <div class="sub-row"><span>BI</span><span>:</span><span id="out-regBI">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIIa</span><span>:</span><span id="out-regBIIa">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIIb</span><span>:</span><span id="out-regBIIb">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>BIII</span><span>:</span><span id="out-regBIII">0</span><span>Orang</span></div>
+                <div class="sub-row"><span>SH</span><span>:</span><span id="out-regBSH">0</span><span>Orang</span></div>
+                <div class="sub-footer"><span>JUMLAH</span><span>:</span><span id="out-totalRegB">0</span><span>Orang</span></div>
+              </div>
             </div>
           </div>
 
@@ -340,6 +371,17 @@
               <div class="sub-row font-bold"><span>Jumlah Residivis</span><span>:</span><span id="out-residivis">0</span><span>Orang</span></div>
             </div>
           </div>
+
+          <!-- Card Realisasi Anggaran pada Infografis -->
+          <div class="card-box">
+            <div class="card-header">REALISASI ANGGARAN <span id="out-tahunAnggaran">2026</span></div>
+            <div class="card-body list-rows">
+              <div class="sub-row"><span>PAGU</span><span>:</span><span id="out-paguAnggaran">Rp 0</span><span></span></div>
+              <div class="sub-row"><span>REALISASI</span><span>:</span><span id="out-realisasiAnggaran">Rp 0</span><span></span></div>
+              <div class="sub-row font-bold"><span>PERSENTASE</span><span>:</span><span id="out-persentaseAnggaran">0%</span><span></span></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
